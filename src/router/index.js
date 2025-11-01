@@ -1,32 +1,26 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import profile from '../views/profile.vue'
-import authPage from '../views/auth-page.vue'
-import stats from '../views/stats.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '@/views/Home.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import Descubrir from '../views/Descubrir.vue'
+import Profile from '../views/Profile.vue'
+import SubirPodcast from '../views/SubirPodcast.vue'
 
-Vue.use(VueRouter)
+const routes = [
+  { path: '/', redirect: '/login' }, 
+  { path: '/Home', component: Home },
+  { path: '/Profile', component: Profile },
+  { path: '/Descubrir', component: Descubrir },
+  { path: '/login', component: Login },
+  { path: '/register', component: Register },
+  { path: '/SubirPodcast', component: SubirPodcast }
+  
 
-const routes = [{
-        path: '/',
-        name: 'authPage',
-        component: authPage
-    },
-    {
-        path: '/profile',
-        name: 'profile',
-        component: profile
-    },
-    {
-        path: '/stats',
-        name: 'stats',
-        component: stats
-    },
 ]
 
-const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes
+const router = createRouter({
+  history: createWebHistory(),
+  routes
 })
 
 export default router

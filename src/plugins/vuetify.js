@@ -1,22 +1,10 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
-import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
-Vue.use(Vuetify);
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
-export default new Vuetify({
-    icons: {
-        iconfont: 'mdi',
-    },
-    breakpoint: {
-        thresholds: {
-            xs: 340,
-            sm: 540,
-            md: 800,
-            lg: 1280,
-        },
-        scrollBarWidth: 24,
-    },
-
-});
+export default createVuetify({
+  components,
+  directives,
+})
