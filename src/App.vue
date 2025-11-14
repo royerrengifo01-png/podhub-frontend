@@ -1,12 +1,9 @@
 <template>
-  <div>
-    <NavBar />  <!-- Siempre visible -->
-    <router-view />
-  </div>
+  <MainLayout />
 </template>
 
 <script setup>
-import NavBar from './components/Navbar.vue'
+import MainLayout from "./layouts/MainLayout.vue";
 </script>
 
 <style>

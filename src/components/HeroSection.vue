@@ -1,6 +1,6 @@
 <template>
   <section class="podcast-section">
-    <!-- LADO IZQUIERDO -->
+    <!-- IZQUIERDA -->
     <div class="text-content">
       <h1>
         Listo para escuchar<br />
@@ -12,20 +12,12 @@
         Descubre, escucha y comparte los mejores podcasts en una sola plataforma.
       </p>
 
-<button>Buscar Podcast</button>
+      <AppButton text="Buscar Podcast" />
 
-
-      <div class="active-users">
-        <img
-          src="https://i.imgur.com/ObX9tVn.png"
-          alt="Users"
-          class="users-img"
-        />
-        <span>Creado por Bueno y valeria</span>
-      </div>
+      <ActiveUsers />
     </div>
 
-    <!-- LADO DERECHO (una sola imagen PNG) -->
+    <!-- DERECHA -->
     <div class="image-side">
       <img :src="podcastImage" alt="Podcast Hero" class="alex-image" />
     </div>
@@ -34,10 +26,12 @@
 
 <script setup>
 import podcastImage from "@/assets/royer.png";
+import AppButton from "./AppButton.vue";
+import ActiveUsers from "./ActiveUsers.vue";
 </script>
-<style scoped>
 
-/* CONTENEDOR PRINCIPAL */
+<style scoped>
+/* === Estilos iguales a los tuyos === */
 .podcast-section {
   display: flex;
   align-items: center;
@@ -48,10 +42,9 @@ import podcastImage from "@/assets/royer.png";
   font-family: "Poppins", sans-serif;
 }
 
-/* LADO IZQUIERDO */
 .text-content {
   max-width: 500px;
-    color: white;
+  color: white;
 }
 
 .text-content h1 {
@@ -73,61 +66,19 @@ import podcastImage from "@/assets/royer.png";
 
 .description {
   color: #ffffff;
-  font-size: 1.rem;
+  font-size: 1.2rem;
   margin-bottom: 2rem;
   max-width: 420px;
   line-height: 1.6;
 }
 
-.browse-button {
-  background: linear-gradient(90deg, #ff7b54, #8b5cf6);
-  border: none;
-  padding: 12px 28px;
-  color: white;
-  border-radius: 30px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.browse-button:hover {
-  transform: scale(1.05);
-}
-
-/* Usuarios activos */
-.active-users {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 1.5rem;
-}
-
-.users-img {
-  width: 60px;
-  height: 25px;
-  object-fit: cover;
-  border-radius: 20px;
-}
-
-.active-users span {
-  color: #bbb;
-  font-size: 0.9rem;
-}
-
-/* LADO DERECHO (IMAGEN HERO) */
 .image-side {
-  position: relative;
-  margin-top: 50px;
   width: 520px;
-  margin-top: -120px;
-  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
-  transform: scale(1.05);
+  margin-top: -110px;
 }
 
 .alex-image {
-    margin-top: 60px;
   width: 100%;
-  height: auto;
   display: block;
   transform: scale(1.05);
 }

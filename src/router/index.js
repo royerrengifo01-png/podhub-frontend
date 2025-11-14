@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home.vue'
-import Login from '../views/Login.vue'
-import Register from '../views/Register.vue'
-import Descubrir from '../views/Descubrir.vue'
-import Profile from '../views/Profile.vue'
-import SubirPodcast from '../views/SubirPodcast.vue'
+import Home from '@/views/HomeView.vue'
+import Login from '../views/LoginView.vue'
+import Register from '../views/RegisterView.vue'
+import Descubrir from '../views/DescubrirView.vue'
+import Profile from '../views/ProfileView.vue'
+import SubirPodcast from '@/views/SubirPodcastView.vue'
+import PodcastPlayView from '@/views/PodcastPlayView.vue'
 
 const routes = [
   { path: '/', redirect: '/login' }, 
@@ -13,8 +14,13 @@ const routes = [
   { path: '/Descubrir', component: Descubrir },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
-  { path: '/SubirPodcast', component: SubirPodcast }
-  
+  { path: '/SubirPodcast', component: SubirPodcast },
+{
+  path: "/podcast/:id",
+  name: "PodcastPlay",
+  component: () => import("../views/PodcastPlayView.vue")
+}
+
 
 ]
 
