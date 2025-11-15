@@ -5,7 +5,7 @@
 
       <!-- Like arriba a la derecha -->
       <button class="like-btn" @click="toggleLike">
-        <span v-if="liked">❤️</span>
+        <span v-if="liked">🤍</span>
         <span v-else>🤍</span>
       </button>
 
@@ -70,12 +70,14 @@ export default {
     const resAll = await fetch("https://podhub-backend.onrender.com/api/podcasts");
     this.podcastsList = await resAll.json();
 
-    this.syncWithRoute();
+    await this.syncWithRoute();
+    await this.checkLike();
   },
 
   watch: {
     "$route.params.id"() {
       this.syncWithRoute();
+      this.checkLike();
     },
   },
 
@@ -88,9 +90,72 @@ export default {
       this.index = this.podcastsList.findIndex((p) => p.id == id);
     },
 
-    toggleLike() {
-      this.liked = !this.liked;
-    },
+    /* ================================================
+       ✔ VERIFICAR SI EL USUARIO YA DIO LIKE (BACKEND)
+    ================================================= */
+async checkLike() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(
+      "https://podhub-backend.onrender.com/api/likes",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      console.error("Error HTTP:", res.status);
+      return;
+    }
+
+    const likes = await res.json();
+
+    // Verifica si este podcast está en los likes del usuario
+    this.liked = likes.some(like => like.podcastId === this.podcast.id);
+
+  } catch (err) {
+    console.error("Error verificando like:", err);
+  }
+}
+
+,
+
+    /* ================================================
+       ✔ DAR / QUITAR LIKE (BACKEND)
+    ================================================= */
+async toggleLike() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Debes iniciar sesión para dar like");
+    return;
+  }
+
+  const id = this.podcast.id;
+
+  try {
+    const res = await fetch(
+      `https://podhub-backend.onrender.com/api/likes/${id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    // Cambiar estado según respuesta
+    this.liked = data.liked;
+  } catch (err) {
+    console.error("Error al actualizar like:", err);
+  }
+},
+
 
     goTo(i) {
       const item = this.podcastsList[i];
@@ -116,12 +181,11 @@ export default {
     },
 
     /* ---------------------------------------
-      CARRUSEL 3D — CORREGIDO Y CENTRADO
+      CARRUSEL 3D — COMPLETAMENTE IGUAL
     ---------------------------------------- */
     computeStyle(i) {
       const offset = i - this.index;
 
-      // Solo mostrar anterior - actual - siguiente
       if (Math.abs(offset) > 1) {
         return {
           opacity: 0,
@@ -174,7 +238,7 @@ export default {
   font-size: 32px;
   cursor: pointer;
   transition: 0.3s;
-  z-index: 9999; /* FIX */
+  z-index: 9999;
 }
 
 .like-btn:hover {
@@ -193,10 +257,7 @@ export default {
   position: absolute;
   top: 0;
   left: 50%;
-  
-  /* FIX IMPORTANTE para centrar */
   transform: translateX(-50%);
-  
   transition: 0.35s ease;
   transform-origin: center center;
 }

@@ -57,7 +57,9 @@ async function login() {
       email: email.value,
       password: password.value,
     })
-    localStorage.setItem("user", JSON.stringify(res.data))
+    // extraer token real
+    const token = res.data.token;
+    localStorage.setItem("token", token);
     router.push("/Home")
   } catch (error) {
     errorMessage.value = "Correo o contraseña incorrectos."

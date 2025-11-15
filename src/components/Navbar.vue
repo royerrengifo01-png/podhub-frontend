@@ -4,6 +4,7 @@
     <router-link to="/Descubrir">Descubrir</router-link>
     <router-link to="/Profile">Perfil</router-link>
     <router-link to="/SubirPodcast">Subir Podcast</router-link>
+    <router-link to="/LikePodcasts">Mis Podcasts</router-link>
 
   </nav>
 </template>

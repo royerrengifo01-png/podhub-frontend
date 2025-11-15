@@ -5,6 +5,7 @@ import Register from '../views/RegisterView.vue'
 import Descubrir from '../views/DescubrirView.vue'
 import Profile from '../views/ProfileView.vue'
 import SubirPodcast from '@/views/SubirPodcastView.vue'
+import LikedPodcasts from '@/views/LikedPodcasts.vue'
 import PodcastPlayView from '@/views/PodcastPlayView.vue'
 
 const routes = [
@@ -19,8 +20,14 @@ const routes = [
   path: "/podcast/:id",
   name: "PodcastPlay",
   component: () => import("../views/PodcastPlayView.vue")
-}
+},
+{
+  path: "/liked",
+  name: "Liked",
+  component: () => import("../views/LikedPodcasts.vue")
+},
 
+{path: '/LikePodcasts', component: LikedPodcasts }
 
 ]
 
