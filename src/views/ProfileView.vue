@@ -1,78 +1,47 @@
 <template>
   <div class="perfil-container">
-    <!-- Contenedor principal -->
     <div class="perfil-contenido">
-      <!-- Imagen lateral izquierda -->
 
-      <!-- Sección derecha: formulario -->
       <div class="formulario">
         <h1 class="titulo">Perfil</h1>
         <p class="descripcion">
-          Tu perfil está casi listo. Completa los campos restantes para asegurar tu cuenta y acceder a todas las funciones.
-          ¡Tu seguridad es lo primero!
+          Observa tu información personal.
         </p>
-      <div class="imagen-lateral">
-        <img src="@/assets/barra.png" alt="Podcasts destacados" />
-      </div>
-        <!-- Foto de perfil -->
-        <div class="foto-perfil">
-          
-          <label for="fotoInput">
-            
-            <img v-if="fotoPreview" :src="fotoPreview" alt="Foto de perfil" />
-            
-            <div v-else class="foto-placeholder">+</div>
-            
-          </label>
-          <input id="fotoInput" type="file" @change="subirFoto" accept="image/*" />
+
+        <div class="imagen-lateral">
+          <img src="@/assets/barra.png" alt="Decoración" />
         </div>
 
-        <!-- Formulario -->
-        <form @submit.prevent="guardarPerfil">
-          <div class="campo">
-            <label>Nombre</label>
-            <input type="text" v-model="nombre" placeholder="Tu nombre" />
-          </div>
+        <!-- FOTO -->
+        <div class="foto-perfil">
+          <img
+            v-if="fotoPreview"
+            :src="fotoPreview"
+            alt="Foto de perfil"
+          />
+          <div v-else class="foto-placeholder">+</div>
+        </div>
 
-          <div class="campo">
-            <label>Email</label>
-            <input type="email" v-model="email" placeholder="Correo electrónico" />
-          </div>
+        <!-- SOLO MOSTRAR DATOS -->
+        <div class="campo">
+          <label>Nombre</label>
+          <input type="text" v-model="nombre" disabled />
+        </div>
 
-          <div class="campo">
-            <label>Dirección</label>
-            <input type="text" v-model="direccion" placeholder="Tu dirección" />
-          </div>
+        <div class="campo">
+          <label>Email</label>
+          <input type="email" v-model="email" disabled />
+        </div>
 
-          <div class="campo">
-            <label>Número</label>
-            <input type="text" v-model="telefono" placeholder="Tu número de teléfono" />
-          </div>
+        <div class="campo">
+          <label>Contraseña</label>
+          <input type="password" v-model="contrasena" disabled />
+        </div>
 
-          <div class="fila">
-            <div class="campo mitad">
-              <label>Ciudad</label>
-              <input type="text" v-model="ciudad" placeholder="Ciudad" />
-            </div>
+        <button class="cerrar-sesion" @click="logout">
+          Cerrar Sesión
+        </button>
 
-            <div class="campo mitad">
-              <label>Estado</label>
-              <input type="text" v-model="estado" placeholder="Estado o departamento" />
-            </div>
-          </div>
-
-          <div class="campo">
-            <label>Contraseña</label>
-            <input type="password" v-model="contrasena" placeholder="Nueva contraseña" />
-          </div>
-
-          <div class="botones">
-            <button type="button" class="cancelar" @click="cancelarCambios">Cancelar</button>
-            <button type="submit" class="guardar">Guardar</button>
-          </div>
-
-          <p v-if="mensaje" class="mensaje">{{ mensaje }}</p>
-        </form>
       </div>
     </div>
   </div>
@@ -81,72 +50,44 @@
 <script>
 export default {
   name: "PerfilUsuario",
+
   data() {
     return {
       nombre: "",
       email: "",
-      direccion: "",
-      telefono: "",
-      ciudad: "",
-      estado: "",
-      contrasena: "",
-      foto: null,
+      contrasena: "********",   // NO se muestra la real, por seguridad
       fotoPreview: null,
-      mensaje: "",
     };
   },
+
+  async mounted() {
+    this.cargarPerfil();
+  },
+
   methods: {
-    subirFoto(event) {
-      const archivo = event.target.files[0];
-      if (archivo) {
-        this.foto = archivo;
-        const lector = new FileReader();
-        lector.onload = (e) => {
-          this.fotoPreview = e.target.result;
-        };
-        lector.readAsDataURL(archivo);
-      }
-    },
-
-    async guardarPerfil() {
+    async cargarPerfil() {
       try {
-        const formData = new FormData();
-        formData.append("email", this.email);
-        formData.append("name", this.nombre);
-        formData.append("adress", this.direccion);
-        formData.append("phone", this.telefono);
-        formData.append("city", this.ciudad);
-        formData.append("state", this.estado);
-        if (this.foto) formData.append("profile_photo", this.foto);
+        const token = localStorage.getItem("token");
+        if (!token) return this.$router.push("/login");
 
-        const response = await fetch("https://podhub-backend.onrender.com/api/profile/update", {
-          method: "PUT",
-          body: formData,
+        const res = await fetch("https://podhub-backend.onrender.com/api/profile", {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.ok) {
-          this.mensaje = "✅ Perfil guardado correctamente";
-        } else {
-          const errorData = await response.json();
-          console.error("⚠️ Error del servidor:", errorData);
-          this.mensaje = "⚠️ Error al guardar el perfil";
-        }
-      } catch (error) {
-        console.error("❌ Error al guardar perfil:", error);
-        this.mensaje = "❌ Ocurrió un error al conectar con el servidor";
+        const data = await res.json();
+
+        this.nombre = data.name;
+        this.email = data.email;
+        this.fotoPreview = data.profile_photo || null;
+
+      } catch (err) {
+        console.error("Error cargando perfil", err);
       }
     },
 
-    cancelarCambios() {
-      this.nombre = "";
-      this.email = "";
-      this.direccion = "";
-      this.telefono = "";
-      this.ciudad = "";
-      this.estado = "";
-      this.contrasena = "";
-      this.fotoPreview = null;
-      this.mensaje = "❌ Cambios cancelados";
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
     },
   },
 };
@@ -287,7 +228,7 @@ export default {
   font-size: 15px;
 }
 
-.guardar {
+.cerrar-sesion {
   background: linear-gradient(90deg, #ff00cc, #7b2fff);
   color: white;
   padding: 10px 25px;
