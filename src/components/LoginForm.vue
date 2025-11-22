@@ -42,12 +42,14 @@
 import axios from "axios"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { useAuthStore } from "@/stores/authStore"
 
 const email = ref("")
 const password = ref("")
 const errorMessage = ref("")
 const loading = ref(false)
 const router = useRouter()
+const auth = useAuthStore()
 
 async function login() {
   loading.value = true
@@ -62,14 +64,8 @@ async function login() {
       }
     )
 
-    // guardar token
-    localStorage.setItem("token", res.data.token)
-
-    // guardar rol
-    localStorage.setItem("role", res.data.user.role)
-
-    // guardar id si lo necesitas
-    localStorage.setItem("userId", res.data.user.id)
+    // USAR EL STORE
+    auth.login(res.data)
 
     router.push("/Home")
   } catch (error) {
@@ -79,6 +75,7 @@ async function login() {
   }
 }
 </script>
+
 
 <style scoped>
 .login-left {

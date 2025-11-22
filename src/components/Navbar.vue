@@ -3,8 +3,10 @@
     <router-link to="/Home">Inicio</router-link>
     <router-link to="/Descubrir">Descubrir</router-link>
 
-    <!-- SOLO ADMINS -->
-    <router-link v-if="role === 'admin'" to="/SubirPodcast">Subir Podcast</router-link>
+    <!-- SOLO SI ES ADMIN -->
+    <router-link v-if="isAdmin" to="/SubirPodcast">
+      Subir Podcast
+    </router-link>
 
     <router-link to="/LikePodcasts">Mis Podcasts</router-link>
     <router-link to="/Profile">Perfil</router-link>
@@ -12,14 +14,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { useAuthStore } from "@/stores/authStore"
 
-const role = ref("")
-
-onMounted(() => {
-  role.value = localStorage.getItem("role") || "user"
-})
+const auth = useAuthStore()
 </script>
+
+
 
 <style>
 .navbar {
