@@ -2,12 +2,24 @@
   <nav class="navbar">
     <router-link to="/Home">Inicio</router-link>
     <router-link to="/Descubrir">Descubrir</router-link>
-    <router-link to="/Profile">Perfil</router-link>
-    <router-link to="/SubirPodcast">Subir Podcast</router-link>
-    <router-link to="/LikePodcasts">Mis Podcasts</router-link>
 
+    <!-- SOLO ADMINS -->
+    <router-link v-if="role === 'admin'" to="/SubirPodcast">Subir Podcast</router-link>
+
+    <router-link to="/LikePodcasts">Mis Podcasts</router-link>
+    <router-link to="/Profile">Perfil</router-link>
   </nav>
 </template>
+
+<script setup>
+import { ref, onMounted } from "vue"
+
+const role = ref("")
+
+onMounted(() => {
+  role.value = localStorage.getItem("role") || "user"
+})
+</script>
 
 <style>
 .navbar {

@@ -12,7 +12,6 @@
         Descubre, escucha y comparte los mejores podcasts en una sola plataforma.
       </p>
 
-      <AppButton text="Buscar Podcast" />
 
       <ActiveUsers />
     </div>
@@ -26,7 +25,6 @@
 
 <script setup>
 import podcastImage from "@/assets/royer.png";
-import AppButton from "./AppButton.vue";
 import ActiveUsers from "./ActiveUsers.vue";
 </script>
 

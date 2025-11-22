@@ -52,14 +52,25 @@ const router = useRouter()
 async function login() {
   loading.value = true
   errorMessage.value = ""
+
   try {
-    const res = await axios.post("https://podhub-backend.onrender.com/api/login", {
-      email: email.value,
-      password: password.value,
-    })
-    // extraer token real
-    const token = res.data.token;
-    localStorage.setItem("token", token);
+    const res = await axios.post(
+      "https://podhub-backend.onrender.com/api/auth/login",
+      {
+        email: email.value,
+        password: password.value,
+      }
+    )
+
+    // guardar token
+    localStorage.setItem("token", res.data.token)
+
+    // guardar rol
+    localStorage.setItem("role", res.data.user.role)
+
+    // guardar id si lo necesitas
+    localStorage.setItem("userId", res.data.user.id)
+
     router.push("/Home")
   } catch (error) {
     errorMessage.value = "Correo o contraseña incorrectos."

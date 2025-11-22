@@ -72,7 +72,7 @@ async function registrarUsuario() {
   }
 
   try {
-    const respuesta = await axios.post("https://podhub-backend.onrender.com/api/register", {
+    const respuesta = axios.post("https://podhub-backend.onrender.com/api/auth/register", {
       name: name.value,
       email: correo.value,
       password: contrasena.value,
